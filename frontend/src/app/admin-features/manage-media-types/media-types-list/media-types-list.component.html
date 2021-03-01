@@ -1,0 +1,87 @@
+<div class="container-fluid">
+  <div class="row mng-page-title">
+    <h2>Media Types List</h2>
+  </div>
+  <div class="row">
+    <div class="col-12 pt-3 pb-3">
+      <div class="toolbar d-block d-md-flex justify-content-between">
+        <div class="d-flex">
+        </div>
+        <div>
+          <a href="mng-item" (click)="create()" onclick="return false" class="m-2"><i class="icon-plus-symbol"></i> New
+            Media</a>
+          <a href="#" class="m-2" data-toggle="modal" data-target="#deleteuserModal" onclick="return false"><i class="icon-delete-button"></i>
+            Delete Media</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <ngx-datatable
+        class="material"
+        [rows]="mediatypes"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [externalPaging]="true"
+        [count]="page.totalElements"
+        [offset]="page.offset"
+        [limit]="page.size"
+        [selected]="selected"
+        [selectionType]="'checkbox'"
+        [selectAllRowsOnPage]="true"
+        (page)='setPage($event)'
+        [externalSorting]="true"
+        (sort)="onSort($event)"
+        (select)='onSelect($event)'>
+        <ngx-datatable-column
+          [width]="30"
+          [sortable]="false"
+          [canAutoResize]="false"
+          [draggable]="false"
+          [resizeable]="false"
+          [headerCheckboxable]="true"
+          [checkboxable]="true">
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Name" prop="media_type_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column>
+            <ng-template let-column="column" ngx-datatable-header-template>
+              Edit
+            </ng-template>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <a href="mng-item" (click)="edit(row)" onclick="return false"> <i class="icon-edit"></i></a>
+            </ng-template>
+          </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
+
+<app-slide-panel #mngmediatypesPanel>
+  <app-manage-media-types [mediaType]="mediaType"></app-manage-media-types>
+</app-slide-panel>
+
+<div *ngIf='selected?.length > 0' class="modal fade" id="deleteuserModal" tabindex="-1" role="dialog" aria-labelledby="collectionLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="collectionLabel">Delete selected Media Types</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are sure want to delete selected Media Types
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="delete()" data-dismiss="modal" class="btn btn-primary">Delete</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

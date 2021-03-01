@@ -1,0 +1,22 @@
+<div class="container-fluid search-area p-2 p-lg-5 text-center">
+  <div class="container">
+    <h2 class="mb-3">Search in CONTENT MARKETING PLATFORM</h2>
+    <form [formGroup]="f" novalidate>
+      <div class="" *ngIf=" mediaTypes?.length > 0 ">
+        <div class="control-group form-group">
+          <ng-multiselect-dropdown formControlName="mediaType" id="valueField" [placeholder]="'Select Media Type'"
+            [data]="mediaTypes" [settings]="dropdownSettings">
+          </ng-multiselect-dropdown>
+        </div>
+      </div>
+      <div class="input-group mb-3 input-group-lg">
+        <input type="text" formControlName="searchText" [(ngModel)]="searchText" class="form-control mb-2" placeholder="please enter at least three characters" aria-label=""
+          aria-describedby="button-addon2">
+        <div class="input-group-append ">
+          <button class="btn btn-outline-secondary" [disabled]="f.invalid" (click)="search()" type="button" id="button-addon2"><i
+              class="icon-search"></i></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

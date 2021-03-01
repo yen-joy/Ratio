@@ -1,0 +1,114 @@
+<div class="container-fluid">
+  <div class="row mng-page-title">
+    <h2>Users List</h2>
+  </div>
+  <div class="row">
+    <div class="col-12 pt-3 pb-3">
+      <div class="toolbar d-block d-md-flex flex-wrap justify-content-between">
+        <div class="d-flex">
+          <div class="mr-3">
+            Brand: <select (change)="onBrand($event.target.value)" class="custom-select custom-select-lg mb-3">
+              <option *ngFor="let b of brands;" value="{{b.value}}">{{ b.name }}</option>
+            </select>
+          </div>
+          <div class="mr-3">
+            Country: <select (change)="onCountry($event.target.value)" class="custom-select custom-select-lg mb-3">
+              <option value="">All</option>
+              <option *ngFor="let c of countries" value="{{c.code}}">{{c.name}}</option>
+            </select>
+          </div>
+          <div>
+            Status: <select (change)="onStatus($event.target.value)" class="custom-select custom-select-lg mb-3">
+              <option *ngFor="let s of statuses;" value="{{s.value}}">{{ s.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div><a href="#" (click)="newuser()" onclick="return false" class="m-2"><i class="icon-plus-symbol"></i> New
+            User</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <ngx-datatable
+        class="material"
+        [rows]="users"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [externalPaging]="true"
+        [count]="page.totalElements"
+        [offset]="page.offset"
+        [limit]="page.size"
+        (page)='setPage($event)'
+        [externalSorting]="true"
+        (sort)="onSort($event)"
+        [scrollbarH]="true">
+        <ngx-datatable-column name="Name" prop="first_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Surname" prop="last_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Email" prop="email">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column>
+          <ng-template let-column="column" ngx-datatable-header-template>
+            Brands
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ (row.natuzzi_access == 1) ? 'ITALIA' : '' }} {{ (row.editions_access == 1) ? 'EDITIONS' : ''
+              }} {{ (row.divanidivani_access == 1) ? 'divanidivani_access' : '' }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column>
+          <ng-template let-column="column" ngx-datatable-header-template>
+            Role
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ (row.role == 1) ? 'Admin' : 'User' }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column>
+          <ng-template let-column="column" ngx-datatable-header-template>
+            Status
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ (row.enable ==1) ? 'Active' : 'InActive' }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column>
+          <ng-template let-column="column" ngx-datatable-header-template>
+            Edit
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <a href="#" (click)="edit(row)" onclick="return false"> <i class="icon-edit"></i></a>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column>
+          <ng-template let-column="column" ngx-datatable-header-template>
+            Logs
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <a href="#" (click)="downloadlogs(row)" onclick="return false"><i class="icon-view"></i></a>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
+
+<app-slide-panel #mnguserPanel>
+  <app-manage-users [userIdInput]="userIdInput"></app-manage-users>
+</app-slide-panel>
+
+<app-slide-panel #viewdownlogsPanel>
+  <app-download-logs [userIdInput]="userIdInput"></app-download-logs>
+</app-slide-panel>

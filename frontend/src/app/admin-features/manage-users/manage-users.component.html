@@ -1,0 +1,146 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <h5>Create new User / Edit User</h5>
+      <form #myForm="ngForm" class="material_form" [formGroup]="f" novalidate>
+        <input type="hidden" [(ngModel)]="userDetails.user_id" formControlName="user_id">
+        <div class="form-group">
+          <label for="muinputname">First Name</label>
+          <input type="text" [(ngModel)]='userDetails.first_name' class="form-control" id="first_name" [ngClass]="{'is-invalid':f.controls['first_name'].invalid && (f.controls['first_name'].touched || f.controls['first_name'].dirty) }"
+            formControlName="first_name" id="muinputname" placeholder="Name">
+          <div class="invalid-feedback">
+            First Name is required
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="muinputSurname">Surname</label>
+          <input type="text" [(ngModel)]='userDetails.last_name' [ngClass]="{'is-invalid':f.controls['last_name'].invalid && (f.controls['last_name'].touched || f.controls['last_name'].dirty) }"
+            formControlName="last_name" class="form-control" id="muinputSurname" placeholder="Surname">
+          <div class="invalid-feedback">
+            Surname is required
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="muinputEmail">Email </label>
+          <input type="email" [(ngModel)]='userDetails.email' [ngClass]="{'is-invalid':f.controls['email'].invalid && (f.controls['email'].touched || f.controls['email'].dirty) }"
+            formControlName="email" class="form-control" id="muinputEmail" placeholder="Email">
+          <div class="invalid-feedback">
+            Email is required
+          </div>
+          <div class="invalid-feedback">
+            Email is not in a valid format
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="minputPassword" minlength="6">Password</label>
+          <input type="password" [ngClass]="{'is-invalid':f.controls['user_hash'].invalid && (f.controls['user_hash'].touched || f.controls['user_hash'].dirty) }"
+            [(ngModel)]='userDetails.user_hash' formControlName="user_hash" class="form-control" id="minputPassword"
+            placeholder="Password">
+          <div class="invalid-feedback">
+            please choose a password and it must be at least 6 characters long.
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6 ">
+            <label for="muinputCompany">Company Name</label>
+            <input type="text" [(ngModel)]='userDetails.company' [ngClass]="{'is-invalid':f.controls['company'].invalid && (f.controls['company'].touched || f.controls['company'].dirty) }"
+              formControlName="company" class="form-control" id="muinputCompany" placeholder="COMPANY NAME">
+            <div class="invalid-feedback">
+              Company name is required
+            </div>
+          </div>
+          <div class="form-group col-md-6 ">
+            <label for="muselectState" class="">Country</label>
+            <select class="form-control" [(ngModel)]='userDetails.state' [ngClass]="{'is-invalid':f.controls['state'].invalid && (f.controls['state'].touched || f.controls['state'].dirty) }"
+              formControlName="state" id="muselectState">
+              <option [selected]="userDetails.state == ''" value="">Please select Country</option>
+              <option *ngFor="let c of states" value="{{c.code}}" [selected]="userDetails.state == c.code" [ngValue]="c.code">{{c.name}}</option>
+            </select>
+            <div class="invalid-feedback">
+              please choose a State
+            </div>
+          </div>
+        </div>       
+        <div class="row">
+          <div class="form-group col-md-4">
+            <div>Brands allowed</div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [(ngModel)]='userDetails.natuzzi_access' [checked]="(userDetails.natuzzi_access==1)"
+                formControlName="natuzzi_access" value="1" class="custom-control-input" id="natuzzi">
+              <label class="custom-control-label" for="natuzzi">Natuzzi Italia</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [(ngModel)]='userDetails.editions_access' [checked]="(userDetails.editions_access==1)"
+                formControlName="editions_access" value="1" class="custom-control-input" id="editions">
+              <label class="custom-control-label" for="editions">Natuzzi Editions</label>
+            </div>            
+          </div>
+          <div class="form-group col-md-4">
+            <div>User Role</div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="roleadmin" [(ngModel)]='userDetails.role' [checked]="(userDetails.role==1)"
+                formControlName="role" name="role" value="1" class="custom-control-input toogle">
+              <label class="custom-control-label" for="roleadmin">Admin</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="roleuser" [(ngModel)]='userDetails.role' [checked]="(userDetails.role==2)"
+                formControlName="role" name="role" value="2" class="custom-control-input toogle">
+              <label class="custom-control-label" for="roleuser">User</label>
+            </div>
+          </div>
+          <div class="form-group col-md-4">
+            <div>User Status</div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [(ngModel)]='userDetails.enable' [checked]="(userDetails.enable==1)" class="custom-control-input"
+                formControlName="enable" value="1" id="active">
+              <label class="custom-control-label" for="active">Active</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [(ngModel)]='userDetails.read_only' [checked]="(userDetails.read_only==1)" class="custom-control-input"
+                formControlName="read_only" value="1" id="readonly">
+              <label class="custom-control-label" for="readonly">Read Only</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [(ngModel)]='userDetails.ldap_flag' [checked]="(userDetails.ldap_flag==1)" class="custom-control-input"
+                formControlName="ldap_flag" value="1" id="ldap_flag">
+              <label class="custom-control-label" for="ldap_flag">Internal</label>
+            </div>
+          </div>
+        </div>
+
+        <!--THESE FIELDS MUST APPEARS ONLY IF THE USER ROLE SELECTED IS ADMIN -->
+        <div class="form-group p-2 rounded" *ngIf="userDetails.role == 1" style="background-color: #f5f5f5;">
+          <label>Admin Settings</label>
+          <div><strong>Can manage user for these brands</strong></div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" [(ngModel)]='userDetails.admin_natuzzi_access' [checked]="(userDetails.admin_natuzzi_access==1)"
+              formControlName="admin_natuzzi_access" value="1" class="custom-control-input" id="admin_natuzzi_access">
+            <label class="custom-control-label" for="admin_natuzzi_access">Natuzzi Italia</label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" [(ngModel)]='userDetails.admin_editions_access' [checked]="(userDetails.admin_editions_access==1)"
+              formControlName="admin_editions_access" value="1" class="custom-control-input" id="admin_editions_access">
+            <label class="custom-control-label" for="admin_editions_access">Natuzzi Editions</label>
+          </div>
+          <div class="control-group form-group mt-3">
+            <label><strong>Can manage User of these countries:</strong></label>
+            <ng-multiselect-dropdown formControlName="access_country" id="access_country" [placeholder]="'Select Countries'"
+              [data]="states" [(ngModel)]="selectedItems" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)"
+              (onSelectAll)="onSelectAll($event)">
+            </ng-multiselect-dropdown>
+          </div>
+        </div>
+        <!--END-->
+
+        <div class="form-group">
+          <label for="usernotes">Notes</label>
+          <textarea class="form-control" formControlName="notes" [(ngModel)]="userDetails.notes" id="usernotes" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <button type="button" [disabled]="f.invalid" (click)="updateUser();" class="btn btn-primary btn-lg">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

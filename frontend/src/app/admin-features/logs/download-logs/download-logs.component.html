@@ -1,0 +1,111 @@
+<div class="container-fluid">
+  <div class="row mng-page-title">
+    <h2>Download Logs</h2>
+  </div>
+  <div class="row p-1 p-lg-2">
+    <div class="col">
+      <div class="col-12 pt-3 pb-3">
+        <div *ngIf="showToolbar === true && content_id === null" class="toolbar d-flex justify-content-between align-items-center">
+          <div class="d-flex">
+            <a class="accordion-title py-0 pb-4 text-center text-dark " (click)="toggleFilters()" aria-controls="collapseFilters"
+              role="button" href="#" onclick="return false"><i class="icon-showfilters"></i>Search & Filter</a>
+          </div>
+          <div>
+            <a href="#" (click)="exportExcel()" onclick="return false" class="m-2"><i class="icon-download"></i>
+              Export logs</a>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-content-center flex-wrap filter-wrap" [@slideInOut]="filtersVisible ? 'in' : 'out'">
+        <div class="pb-3 pr-2">
+          Search Contents
+          <div class="input-group mb-3">
+            <input type="text" [(ngModel)]="searchContents" name="searchContents" class="form-control" placeholder="" aria-label="" [attr.aria-describedby]="'searchContentsButton' + instanceId">
+            <div class="input-group-append">
+              <button (click)="searchContentsOnClick()" class="btn btn-outline-secondary" type="button" [id]="'searchContentsButton' + instanceId">Search</button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="privateContents === false" class="pb-3 pr-2 d-flex">
+          <div class="mr-2">
+            Brand: <select (change)="brandFilterOnChange($event.target.value)" class="custom-select  mb-3" name="brandFilter">
+            <option selected value="0">All</option>
+            <option *ngFor="let brand of brands" value="{{brand.id}}">{{brand.label}}</option>
+          </select>
+          </div>
+          <div *ngIf="brand_id !== null" class="">
+            Category: <select (change)="categoryFilterOnChange($event.target.value)" class="custom-select  mb-3" neme="categoryFilter">
+            <option selected value="0">All</option>
+            <option *ngFor="let category of categories" value={{category.category_id}}>{{category.view_category_name}}</option>
+          </select>
+          </div>
+        </div>
+        <div *ngIf="brand_id === null" class="pb-3 pr-2">
+          <div class="form-group mr-3 custom-control custom-checkbox check-button">
+            <input type="checkbox" [(ngModel)]="privateContents" class="custom-control-input" [id]="'listShared' + instanceId" name="listShared" (change)="privateFilterOnChange($event.target.checked)">
+            <label class="custom-control-label" [attr.for]="'listShared' + instanceId">List Shared Contents</label>
+          </div>
+        </div>
+        <div class="pb-3 pr-2">
+          <div class="d-block">
+            Filter by Users
+            <ng-select
+              [items]="userFilterList | async"
+              [multiple]="true"
+              [closeOnSelect]="false"
+              bindLabel="name"
+              placeholder="Select users"
+              [loading]="userFilterLoading"
+              [typeahead]="userFilterInput"
+              [(ngModel)]="userFilterSelected"
+              (search)="userFilterOnSearch($event)"
+              (change)="userFilterOnChange($event)"
+              name="userSelect">
+            </ng-select>
+          </div>
+        </div>
+      </div>
+      <ngx-datatable
+        class="material"
+        [rows]="logs"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [externalPaging]="true"
+        [count]="page.totalElements"
+        [offset]="page.offset"
+        [limit]="page.size"
+        (page)='setPage($event)'
+        [externalSorting]="true"
+        (sort)="onSort($event)"
+        [scrollbarH]="true">
+        <ngx-datatable-column name="User Name" prop="first_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="User Surname" prop="last_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Email" prop="email">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Content" prop="content_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Download date" prop="download_date">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value | date : 'yyyy-MM-dd HH:mm:ss'}}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

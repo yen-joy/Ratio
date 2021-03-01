@@ -1,0 +1,59 @@
+<div class="p-4 text-center">
+  <img src="../../../assets/img/natuzzi_plain.svg" />
+</div>
+<div class="log-in-box p-3 ">
+  <div class=" text-center">
+    <h6>Welcome to Marketing<br> & Communication Platform
+    </h6>
+  </div>
+  <!-- MESSAGE TO BE SHOWN AFTER THE USER VALIDATE HIS EMAIL -->
+  <div *ngIf="currentStatus == 1" class="p5">
+    Your email has been verified, your request will be managed by the Administrator and a notification will be sent to
+    you.
+    Thanks
+  </div>
+  <!-- END MESSAGE -->
+  <form class="needs-validation" [formGroup]="f" novalidate *ngIf="currentStatus == 0">
+    <div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <i class="icon-log-in" id="log-in"></i>
+        </div>
+        <input type="text" class="form-control" tabindex="1" [ngClass]="{'is-invalid':f.controls['email'].invalid && (f.controls['email'].touched || f.controls['email'].dirty) }"
+          formControlName="email" placeholder="user name or email" aria-label="user name or email" aria-describedby="log-in">
+        <div class="invalid-feedback">
+          User name or email is required
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="text-right"><small><a href="#" (click)="resetPanel.open()" tabindex="4" onclick="return false">Reset</a></small></div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <i class="icon-lock" id="pwd"></i>
+        </div>
+        <input type="password" tabindex="2" class="form-control" [ngClass]="{'is-invalid':f.controls['user_hash'].invalid && (f.controls['user_hash'].touched || f.controls['user_hash'].dirty) }"
+          formControlName="user_hash" placeholder="Password" aria-label="Password" aria-describedby="pwd">
+        <div class="invalid-feedback">
+          Password is required
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-light btn-lg w-100 mt-3" tabindex="3" [disabled]="f.invalid" (click)="onSubmit()">LOGIN</button>
+    <!--(click)="changePanel.open()"-->
+  </form>
+  <div class="text-center" *ngIf="currentStatus == 0">
+    <div class="mb-2 mt-2">OR</div>
+    <button class="btn btn-outline-light btn-lg w-100 text-adaptive" (click)="registrationPanel.open()">CREATE AN
+      ACCOUNT</button>
+  </div>
+</div>
+<app-slide-panel #resetPanel>
+  <app-reset-password></app-reset-password>
+</app-slide-panel>
+<app-slide-panel #changePanel>
+  <app-change-password></app-change-password>
+</app-slide-panel>
+<app-slide-panel #registrationPanel>
+  <app-register></app-register>
+</app-slide-panel>

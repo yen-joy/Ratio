@@ -1,0 +1,43 @@
+.log-in-box{
+  background-color: rgba(255, 255, 255, 0.4);
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  input{background-color: rgba(255, 255, 255, 0.6);border:0;color:#fff!important;font-family: 'Quicksand', sans-serif;/*text-transform: uppercase;*/}
+  input[placeholder]{color:#fff!important;}
+  .input-group-prepend{background-color: rgba(255, 255, 255, 0.6);padding:10px;-webkit-border-top-left-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;}
+  a{color:#fff;}
+  .input-group > .form-control:not(:last-child), .input-group > .custom-select:not(:last-child) {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  .invalid-feedback {
+
+    color: #fff;
+  }
+}
+/*responsive tuning*/
+
+@media screen and (min-device-width: 320px)
+and (max-device-width: 840px) {
+  .log-in-box{
+    background-color: rgba(0, 0, 0, 0.7);}
+}
+
+@media screen and (min-device-width: 320px)
+and (max-device-width: 1024px) {
+  .text-adaptive{font-size:1rem;}
+}
+
+@media screen and (min-device-width: 568px)
+and (max-device-width: 736px) {
+  img{
+    max-width: 30%;
+
+  }
+}

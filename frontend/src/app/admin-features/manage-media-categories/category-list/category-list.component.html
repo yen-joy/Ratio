@@ -1,0 +1,163 @@
+<div class="container-fluid">
+  <div class="row mng-page-title">
+    <h2>Categories List</h2>
+  </div>
+  <div class="row">
+    <div class="col-12 pt-3 pb-3">
+      <div class="toolbar d-block d-md-flex justify-content-between">
+        <div></div>
+        <div><a href="#" (click)="create()" onclick="return false" class="m-2"><i class="icon-plus-symbol"></i> New
+            Category</a>
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let brand of brands; let brandIndex = index;" class="col-12 col-md-6">
+      <div id="treeview_container{{brandIndex}}" class="hummingbird-treeview well h-scroll-large">
+        <ul id="treeview{{brandIndex}}" class="hummingbird-base">
+          <li *ngIf="categories[brand.id]?.length > 0">
+            <i class="fa fa-minus"></i> <label> <input id="node-{{brandIndex}}" data-id="custom-{{brandIndex}}" hidden>{{brand.label | uppercase}}</label>
+            <ul style="display: block;" *ngFor="let cat of categories[brand.id]">
+              <li>
+                <i class="fa fa-plus"></i> <label> <input id="node-{{brandIndex}}-{{cat.category_id}}" data-id="custom-{{brandIndex}}-{{cat.category_id}}"
+                    hidden><a href="#" (click)="edit(cat)" onclick="return false"> {{cat.category_name}}</a></label><i
+                  *ngIf="(cat.childs?.length == 0 && cat.content?.length == 0)" class="fa fa-trash" (click)="checked(cat, $event.target.checked)"
+                  data-toggle="modal" data-target="#delcat"></i>
+                <ul>
+                  <li *ngFor="let sub_cat of cat.childs">
+                    <i class="fa fa-plus"></i> <label> <input id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}"
+                        data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}" hidden><a href="#" (click)="edit(sub_cat)"
+                        onclick="return false">{{sub_cat.category_name}}</a></label><i *ngIf="(sub_cat.childs?.length == 0 && sub_cat.content?.length == 0)"
+                      class="fa fa-trash" (click)="checked(sub_cat, $event.target.checked)" data-toggle="modal"
+                      data-target="#delcat"></i>
+                    <ul>
+                      <li *ngFor="let sub_cat_sub of sub_cat.childs">
+                        <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}"
+                            data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}"
+                            hidden><a href="#" (click)="edit(sub_cat_sub)" onclick="return false">
+                            {{sub_cat_sub.category_name}}</a></label><i *ngIf="(sub_cat_sub.childs?.length == 0 && sub_cat_sub.content?.length == 0)"
+                          class="fa fa-trash" on-click="checked(sub_cat_sub, $event.target.checked)" data-toggle="modal"
+                          data-target="#delcat"></i>
+                        <ul>
+                          <li *ngFor="let sub_cat_sub_sub of sub_cat_sub.childs">
+                            <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}"
+                                data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}"
+                                hidden><a href="#" (click)="edit(sub_cat_sub_sub)" onclick="return false">
+                                {{sub_cat_sub_sub.category_name}}</a></label><i *ngIf="(sub_cat_sub_sub.childs?.length == 0 && sub_cat_sub_sub.content?.length == 0)"
+                              class="fa fa-trash" on-click="checked(sub_cat_sub_sub, $event.target.checked)"
+                              data-toggle="modal" data-target="#delcat"></i>
+                            <ul>
+                              <li *ngFor="let sub_cat_sub_sub_sub of sub_cat_sub_sub.childs">
+                                <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}"
+                                    data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}"
+                                    hidden><a href="#" (click)="edit(sub_cat_sub_sub_sub)" onclick="return false">
+                                    {{sub_cat_sub_sub_sub.category_name}}</a></label><i *ngIf="(sub_cat_sub_sub_sub.childs?.length == 0 && sub_cat_sub_sub_sub.content?.length == 0)"
+                                  class="fa fa-trash" on-click="checked(sub_cat_sub_sub_sub, $event.target.checked)"
+                                  data-toggle="modal" data-target="#delcat"></i>
+                                <ul>
+                                  <li *ngFor="let sub_cat_sub6 of sub_cat_sub_sub_sub.childs">
+                                    <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}"
+                                        data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}"
+                                        hidden><a href="#" (click)="edit(sub_cat_sub6)" onclick="return false">{{sub_cat_sub6.category_name}}</a></label><i
+                                      *ngIf="(sub_cat_sub6.childs?.length == 0 && sub_cat_sub6.content?.length == 0)"
+                                      class="fa fa-trash" on-click="checked(sub_cat_sub6, $event.target.checked)"
+                                      data-toggle="modal" data-target="#delcat"></i>
+                                    <ul>
+                                      <li *ngFor="let sub_cat_sub7 of sub_cat_sub6.childs">
+                                        <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}"
+                                            data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}"
+                                            hidden><a href="#" (click)="edit(sub_cat_sub7)" onclick="return false">{{sub_cat_sub7.category_name}}</a></label><i
+                                          *ngIf="(sub_cat_sub7.childs?.length == 0 && sub_cat_sub7.content?.length == 0)"
+                                          class="fa fa-trash" on-click="checked(sub_cat_sub7, $event.target.checked)"
+                                          data-toggle="modal" data-target="#delcat"></i>
+                                        <ul>
+                                          <li *ngFor="let sub_cat_sub8 of sub_cat_sub7.childs">
+                                            <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}"
+                                                data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}"
+                                                hidden><a href="#" (click)="edit(sub_cat_sub8)" onclick="return false">{{sub_cat_sub8.category_name}}</a></label><i
+                                              *ngIf="(sub_cat_sub8.childs?.length == 0 && sub_cat_sub8.content?.length == 0)"
+                                              class="fa fa-trash" on-click="checked(sub_cat_sub8, $event.target.checked)"
+                                              data-toggle="modal" data-target="#delcat"></i>
+                                            <ul>
+                                              <li *ngFor="let sub_cat_sub9 of sub_cat_sub8.childs">
+                                                <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}-{{sub_cat_sub9.category_id}}"
+                                                    data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}-{{sub_cat_sub9.category_id}}"
+                                                    hidden><a href="#" (click)="edit(sub_cat_sub9)" onclick="return false">{{sub_cat_sub9.category_name}}</a></label><i
+                                                  *ngIf="(sub_cat_sub9.childs?.length == 0 && sub_cat_sub9.content?.length == 0)"
+                                                  class="fa fa-trash" on-click="checked(sub_cat_sub9, $event.target.checked)"
+                                                  data-toggle="modal" data-target="#delcat"></i>
+                                                <ul>
+                                                  <li *ngFor="let sub_cat_sub10 of sub_cat_sub9.childs">
+                                                    <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent"
+                                                        id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}-{{sub_cat_sub9.category_id}}-{{sub_cat_sub10.category_id}}"
+                                                        data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}-{{sub_cat_sub9.category_id}}-{{sub_cat_sub10.category_id}}"
+                                                        hidden><a href="#" (click)="edit(sub_cat_sub10)" onclick="return false">{{sub_cat_sub10.category_name}}</a></label><i
+                                                      *ngIf="(sub_cat_sub10.childs?.length == 0 && sub_cat_sub10.content?.length == 0)"
+                                                      class="fa fa-trash" on-click="checked(sub_cat_sub10, $event.target.checked)"
+                                                      data-toggle="modal" data-target="#delcat"></i>
+                                                  </li>
+                                                </ul>
+                                              </li>
+                                            </ul>
+                                          </li>
+                                        </ul>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>   
+  </div>
+</div>
+
+<app-slide-panel #mngcategoyPanel>
+  <app-manage-media-categories [category]="editCategory"></app-manage-media-categories>
+</app-slide-panel>
+
+<div class="modal fade" id="delcat" tabindex="-1" role="dialog" aria-labelledby="collectionLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="collectionLabel">Delete selected User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are sure want to delete selected Request
+      </div>
+      <ul id="treeview" class="hummingbird-base">
+        <ul style="display: block;" *ngFor="let cat of categoryIds">
+          <li>
+            <label><a href="#" (click)="edit(cat)" onclick="return false"> {{cat.category_name}}</a></label>
+            <ul>
+              <li *ngFor="let sub_cat of cat.childs">
+                <label> <a href="#" (click)="edit(sub_cat)" onclick="return false">{{sub_cat.category_name}}</a></label>
+                <ul>
+                  <li *ngFor="let sub_cat_sub of sub_cat.childs"><label> <a href="#" (click)="edit(sub_cat_sub)"
+                        onclick="return false"> {{sub_cat_sub.category_name}}</a></label>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </ul>
+      <div class="modal-footer">
+        <button type="button" (click)="delete()" data-dismiss="modal" class="btn btn-primary">Delete</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+
+
+body{font-family: 'Lato', sans-serif;}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #d4145a;
+}
+.custom-control-input:checked ~ .custom-control-label::before {
+
+  background-color: #d4145a;
+}
+
+//.btn-primary{background-color: #321e0a;}
+
+

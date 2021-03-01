@@ -1,0 +1,78 @@
+<div class="d-flex align-items-center full-h">
+  <div>
+    <div class="p-3">
+      <h4>Manage your account to</h4>
+      <h2>
+        Marketing and Communication Platform</h2>
+      <div><small>All fields are required</small></div>
+    </div>
+    <form #loginForm="ngForm" class="material_form" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group col-md-6 p-3">
+          <label for="uainputname" class="d-none">NAME</label>
+          <input type="text" required #adminname="ngModel" class="form-control" id="uainputname" placeholder="NAME"
+            [(ngModel)]='User.first_name' name="first_name">
+          <div [hidden]="adminname.valid || adminname.pristine" style="color:red;font-size:10px">
+            <div [hidden]="!adminname.hasError('required')">Name is required</div>
+          </div>
+        </div>
+        <div class="form-group col-md-6 p-3">
+          <label for="uainputSurname" class="d-none">SURNAME</label>
+          <input type="TEXT" required #surname="ngModel" class="form-control" id="uainputSurname" placeholder="SURNAME"
+            [(ngModel)]='User.last_name' name="last_name">
+          <div [hidden]="surname.valid || surname.pristine" style="color:red;font-size:10px">
+            <div [hidden]="!surname.hasError('required')">Surname is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6 p-3">
+          <label for="uinputEmail" class="d-none">EMAIL</label>
+          <input type="email" [readonly]='true' class="form-control" id="uinputEmail" required #emailid="ngModel"
+            pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" placeholder="EMAIL" [(ngModel)]='User.email' name="email">
+          <div [hidden]="emailid.valid || emailid.pristine" style="color:red;font-size:10px">
+            <div [hidden]="!emailid.hasError('required')">Email Address is required</div>
+            <p [hidden]="!emailid.hasError('pattern')">Email format should be<small><b>joe@abc.com</b></small></p>
+          </div>
+        </div>
+        <div class="form-group col-md-6 p-3">
+          <label for="uinputPassword" class="d-none">PASSWORD</label>
+          <input type="password" class="form-control" #password="ngModel" [(ngModel)]='User.user_hash' id="uinputPassword"
+            name="user_hash" placeholder="PASSWORD">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6 p-3">
+          <label for="inputCompany" class="d-none">COMPANY NAME</label>
+          <input type="text" required [(ngModel)]='User.company' #companyname="ngModel" class="form-control" id="inputCompany"
+            placeholder="COMPANY NAME" name="company">
+          <div [hidden]="companyname.valid || companyname.pristine" style="color:red;font-size:10px">
+            <div [hidden]="!companyname.hasError('required')">Companyname is required</div>
+          </div>
+        </div>
+        <div class="form-group col-md-6 p-3">
+          <label for="uselectState" class="">Country</label>
+          <select [(ngModel)]="User.state" name="state" class="form-control" id="uselectState">
+            <option [selected]="User.state == ''" value="">Please select Country</option>
+            <option *ngFor="let c of states" value="{{c.code}}" [selected]="User.state == c.code" [ngValue]="c.code">{{c.name}}</option>
+          </select>
+          <div class="invalid-feedback">
+            please choose a State
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group p-3">
+          <div>Brands Allowed</div>
+          <div class="d-flex flex-wrap">
+            <div class="filter m-2" *ngIf="User.natuzzi_access"> Natuzzi Italia </div>
+            <div class="filter  m-2" *ngIf="User.editions_access">Natuzzi Editions </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-left text-md-right p-3">
+        <button type="submit" [disabled]="loginForm.form.invalid" class="btn btn-outline-dark btn-lg" id="editUserDetails">Update</button>
+      </div>
+    </form>
+  </div>
+</div>

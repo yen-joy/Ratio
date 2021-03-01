@@ -1,0 +1,126 @@
+<div class="container-fluid">
+  <div class="row mng-page-title">
+    <h2>Content List</h2>
+  </div>
+  <div class="row p-2 p-lg-4">
+    <div class="col">
+      <div class="pt-3 pb-3">
+        <div class="toolbar d-block d-md-flex justify-content-between  align-content-center">
+          <div class="d-flex">
+            <a class="accordion-title py-0 pb-4 text-center text-dark " (click)="toggleFilters()" aria-controls="collapseFilters"
+              role="button" href="#" onclick="return false"><i class="icon-showfilters"></i>Search & Filter</a>
+          </div>
+          <div><a [routerLink]="['/mng-item']" class="m-2"><i class="icon-plus-symbol"></i> New Content</a>
+            <a href="#" class="m-2" data-toggle="modal" data-target="#deleteuserModal" onclick="return false"><i class="icon-delete-button"></i>
+              Delete Content</a> </div>
+        </div>
+      </div>
+      <div class="d-flex align-content-center border-0 filter-wrap flex-wrap" [@slideInOut]="filtersVisible ? 'in' : 'out'">
+        <div class="pb-3 pr-2">
+          Search Contents
+          <div class="input-group mb-3">
+            <input type="text" [(ngModel)]="searchContents" class="form-control" placeholder="" aria-label="" aria-describedby="button-addon2">
+            <div class="input-group-append">
+              <button (click)="searchContentsOnClick()" class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="privateContents === false" class="pb-3 pr-2 d-flex align-content-center">
+          <div class="mr-2">
+            Brand: <select (change)="brandFilterOnChange($event.target.value)" class="custom-select mb-3">
+            <option selected value="0">All</option>
+            <option *ngFor="let brand of brands" value="{{brand.id}}">{{brand.label}}</option>
+          </select>
+          </div>
+          <div *ngIf="brand_id !== null">
+            Category: <select (change)="categoryFilterOnChange($event.target.value)" class="custom-select mb-3">
+            <option selected value="0">All</option>
+            <option *ngFor="let category of categories" value={{category.category_id}}>{{category.view_category_name}}</option>
+          </select>
+          </div>
+        </div>
+        <div *ngIf="brand_id === null" class="pb-3 pt-3">
+          <div class="form-group custom-control custom-checkbox check-button">
+            <input type="checkbox" (change)="privateFilterOnChange($event.target.checked)" class="custom-control-input" id="listShared">
+            <label class="custom-control-label" for="listShared">List Shared Contents</label>
+          </div>
+        </div>
+      </div>
+      <ngx-datatable
+        class="material"
+        [rows]="contents"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [externalPaging]="true"
+        [count]="page.totalElements"
+        [offset]="page.offset"
+        [limit]="page.size"
+        [selected]="selected"
+        [selectionType]="'checkbox'"
+        [selectAllRowsOnPage]="true"
+        (page)='setPage($event)'
+        [externalSorting]="true"
+        (sort)="onSort($event)"
+        (select)='onSelect($event)'
+        [scrollbarH]="true">
+        <ngx-datatable-column
+          [width]="30"
+          [sortable]="false"
+          [canAutoResize]="false"
+          [draggable]="false"
+          [resizeable]="false"
+          [headerCheckboxable]="true"
+          [checkboxable]="true">
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Title" prop="content_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column>
+          <ng-template let-column="column" ngx-datatable-header-template>
+            Edit
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <a [routerLink]="['/mng-item', row.content_id]"> <i class="icon-edit"></i></a>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column>
+          <ng-template let-column="column" ngx-datatable-header-template>
+            Download logs
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <a href="#" (click)="downloadlogs(row)" onclick="return false"><i class="icon-view"></i></a>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
+
+<app-slide-panel #viewdownlogsPanel>
+  <app-download-logs [contentInput]="contentInput"></app-download-logs>
+</app-slide-panel>
+
+<div *ngIf='selected?.length > 0' class="modal fade" id="deleteuserModal" tabindex="-1" role="dialog" aria-labelledby="collectionLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="collectionLabel">Delete selected User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are sure want to delete selected Request
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="delete()" data-dismiss="modal" class="btn btn-primary">Delete</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

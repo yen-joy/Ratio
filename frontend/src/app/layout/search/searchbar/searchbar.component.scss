@@ -1,0 +1,28 @@
+.search-area{
+  background-color: #f5f5f5;
+  .dropdown-menu{background-color: #e6e6e6;}
+  .btn{border:0;background-color: #e6e6e6;}
+  input{border:0;background-color: #cfcbc7;}
+  .input-group-prepend .btn{border-top-right-radius: 0;
+    border-bottom-right-radius: 0;line-height: 1.6!important;}
+  .input-group-append .btn{background-color: #cfcbc7;}
+}
+
+
+/*RESPONSIVE SETTINGS*/
+
+/*PHONES Portrait and Landscape */
+@media only screen
+and (min-device-width: 320px)
+and (max-device-width: 600px)
+and (-webkit-min-device-pixel-ratio: 2) {
+
+  .input-group,.input-group-prepend, .input-group-append{display: block;}
+  .dropdown-toggle,.dropdown-menu,.btn{
+    width:100%;}
+  .input-group > .form-control{width: 100%;}
+  .btn,input{border-top-right-radius: 5px!important;
+    border-bottom-right-radius: 5px!important;
+    border-top-left-radius: 5px!important;
+    border-bottom-left-radius: 5px!important;}
+}

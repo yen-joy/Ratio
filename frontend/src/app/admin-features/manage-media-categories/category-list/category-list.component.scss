@@ -1,0 +1,54 @@
+.parent{position:relative;padding-left:15px;}
+.parent::before{
+  content:"";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0.5em;
+  border-top: 1px solid black;
+  z-index: -1;
+  width:10px;
+}
+.child1{
+  margin-left:20px;
+}
+.child2{
+  margin-left:40px;
+}
+.child3{
+  margin-left:60px;
+}
+
+.hummingbird-treeview,
+.hummingbird-treeview *
+{
+  list-style: none;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.hummingbird-treeview label {
+  font-weight: normal;
+}
+
+
+.hummingbird-treeview input[type=checkbox] {
+  width : 16px;
+  height :16px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.hummingbird-treeview ul:not(.hummingbird-base) {
+  display: none;
+}
+
+.hummingbird-treeview .fa {
+  font-style: normal;
+  cursor: pointer;
+
+
+}
+.hummingbird-treeview i{ font-family: FontAwesome!important;margin-right: 10px;}
+//.h-scroll-large{max-height: 300px;overflow: auto;}

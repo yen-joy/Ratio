@@ -1,0 +1,232 @@
+<div class="container-fluid">
+  <div class="row mng-page-title">
+    <h2>{{ isUpdate ? 'Edit Media' : 'New Media' }}</h2>
+  </div>
+  <div class="row p-2 p-lg-5">
+    <div class="col">
+      <form [formGroup]="contentForm" (ngSubmit)="submitForm(contentForm.value)">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <label for="catname"> Media Name</label>
+              <input type="text" formControlName="contentNameControlName" [(ngModel)]='contentNameControlValue' class="form-control"
+                id="catname" placeholder="Example input">
+            </div>
+            <div class="form-group">
+              <div class="form-group">
+                <label>Poster Image</label>
+                <div class="d-block d-lg-flex">
+                  <img width="150px" height="100px" src="{{urlImage}}" class="pr-2" />
+                  <div class="d-flex flex-column">
+                    <input type="file" class="form-control" (change)="onSelectImageFile($event)" formControlName="imageFileControlName"
+                      [ngClass]="{'is-invalid':contentForm.controls['imageFileControlName'].invalid && (contentForm.controls['imageFileControlName'].touched || contentForm.controls['imageFileControlName'].dirty) }">
+                    <div class="invalid-feedback">
+                      The Maximum File size for poster image is 1MB, <br> you file exceeded this size.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="control-group form-group">
+              <label for="input-tags2">Select Media Types:</label>
+              <ng-multiselect-dropdown formControlName="mediaTypeControlName" id="valueField" [placeholder]="'Select Media Type'"
+                [data]="mediaTypes" [(ngModel)]="mediaTypeControlValue" [settings]="dropdownSettings">
+              </ng-multiselect-dropdown>
+            </div>
+            <div class="form-group">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" (change)="onSelectMediaFile($event)" id="mediaFile">
+                <label class="custom-file-label" for="mediaFile">{{(mediaFile)?mediaFile.name:mediaFileName}}</label>
+              </div>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" formControlName="copyrightControlName" class="custom-control-input" id="copy-on"
+              [(ngModel)]="copyrightControlValue">
+              <label class="custom-control-label" for="copy-on">This media is protected by copyright</label>
+            </div>
+            <div class="d-flex flex-wrap mt-4">
+              <div class="mr-4">
+                <label>This media will be available from</label>
+                <div class="form-group form-inline">
+                  <div class="input-group">
+                    <input class="form-control" [(ngModel)]='availabilityDateControlValue' formControlName="availabilityDateControlName"
+                      placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #ds="ngbDatepicker" (dateSelect)="onAvailabilityDateSelect($event)">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="ds.toggle()" type="button"><i class="icon-calendar"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div><label>Till</label>
+                <div class="form-group form-inline">
+                  <div class="input-group">
+                    <input class="form-control" [(ngModel)]='expirationDateControlValue' formControlName="expirationDateControlName"
+                      placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #de="ngbDatepicker" (dateSelect)="onExpirationDateSelect($event)">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="de.toggle()" type="button"><i class="icon-calendar"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4"></div>
+            <div class="form-group">
+              <label for="notesControlName">Notes</label>
+              <textarea formControlName="notesControlName" name="notesControlName" [(ngModel)]='notesControlValue' class="form-control" id="notesControlName" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="col-md-4 side-fields">
+            <div class="custom-control custom-radio mb-3">
+              <input type="radio" (change)="privateContentChange()" [(ngModel)]="privateContentControlValue"
+                id="privateContentControlId1" formControlName="privateContentControlName" value="0" name="privateContentControlName" class="custom-control-input">
+              <label class="custom-control-label" for="privateContentControlId1">Add this Media to categories</label>
+            </div>
+            <div *ngIf="privateContentControlValue == '0'">
+              <h5>Select Category</h5>
+              <div *ngFor="let brand of brands; let brandIndex = index;" id="treeview_container{{brandIndex}}" class="hummingbird-treeview well h-scroll-large">
+                <ul id="contentsTreeView{{brandIndex}}" class="hummingbird-base">
+                  <li *ngIf="categories[brand.id]?.length > 0">
+                    <i class="fa fa-minus"></i> <label>{{brand.label | uppercase}}</label>
+                    <ul style="display: block;" *ngFor="let cat of categories[brand.id]">
+                      <li>
+                        <i class="fa fa-plus"></i><label> <input value="{{cat.category_id}}" name="categoriesChheckboxControlName" id="node-{{brandIndex}}-{{cat.category_id}}"
+                            [checked]="selectedCategories.indexOf(cat.category_id) > -1" data-id="custom-{{cat.category_id}}"
+                            type="checkbox"> {{cat.category_name}}</label>
+                        <ul>
+                          <li *ngFor="let sub_cat of cat.childs">
+                            <i class="fa fa-plus"></i><label> <input value="{{sub_cat.category_id}}" name="categoriesChheckboxControlName"
+                                id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}" [checked]="selectedCategories.indexOf(sub_cat.category_id) > -1"
+                                data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}" type="checkbox">{{sub_cat.category_name}}</label>
+                            <ul>
+                              <li *ngFor="let sub_cat_sub of sub_cat.childs">
+                                <i class="fa fa-plus"></i><label> <input value="{{sub_cat_sub.category_id}}" class="hummingbirdNoParent"
+                                    name="categoriesChheckboxControlName" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}"
+                                    [checked]="selectedCategories.indexOf(sub_cat_sub.category_id) > -1" data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}"
+                                    type="checkbox">{{sub_cat_sub.category_name}}</label>
+                                <ul>
+                                  <li *ngFor="let sub_cat_sub_sub of sub_cat_sub.childs">
+                                    <i class="fa fa-plus"></i><label> <input value="{{sub_cat_sub_sub.category_id}}"
+                                        class="hummingbirdNoParent" name="categoriesChheckboxControlName" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}"
+                                        data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}"
+                                        [checked]="selectedCategories.indexOf(sub_cat_sub_sub.category_id) > -1" type="checkbox">
+                                      {{sub_cat_sub_sub.category_name}}</label>
+                                    <ul>
+                                      <li *ngFor="let sub_cat_sub_sub_sub of sub_cat_sub_sub.childs">
+                                        <i class="fa fa-plus"></i><label> <input value="{{sub_cat_sub_sub_sub.category_id}}"
+                                            class="hummingbirdNoParent" name="categoriesChheckboxControlName" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}"
+                                            data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}"
+                                            [checked]="selectedCategories.indexOf(sub_cat_sub_sub_sub.category_id) > -1"
+                                            type="checkbox"> {{sub_cat_sub_sub_sub.category_name}}</label>
+                                        <ul>
+                                          <li *ngFor="let sub_cat_sub6 of sub_cat_sub_sub_sub.childs">
+                                            <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}"
+                                                data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}"
+                                                [checked]="selectedCategories.indexOf(sub_cat_sub6.category_id) > -1"
+                                                type="checkbox">{{sub_cat_sub6.category_name}}</label>
+                                            <ul>
+                                              <li *ngFor="let sub_cat_sub7 of sub_cat_sub6.childs">
+                                                <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent" id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}"
+                                                    data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}"
+                                                    [checked]="selectedCategories.indexOf(sub_cat_sub7.category_id) > -1"
+                                                    type="checkbox">{{sub_cat_sub7.category_name}}</label>
+                                                <ul>
+                                                  <li *ngFor="let sub_cat_sub8 of sub_cat_sub7.childs">
+                                                    <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent"
+                                                        id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}"
+                                                        data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}"
+                                                        [checked]="selectedCategories.indexOf(sub_cat_sub8.category_id) > -1"
+                                                        type="checkbox">{{sub_cat_sub8.category_name}}</label>
+                                                    <ul>
+                                                      <li *ngFor="let sub_cat_sub9 of sub_cat_sub8.childs">
+                                                        <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent"
+                                                            id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}-{{sub_cat_sub9.category_id}}"
+                                                            data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}-{{sub_cat_sub9.category_id}}"
+                                                            [checked]="selectedCategories.indexOf(sub_cat_sub9.category_id) > -1"
+                                                            type="checkbox">{{sub_cat_sub9.category_name}}</label>
+                                                        <ul>
+                                                          <li *ngFor="let sub_cat_sub10 of sub_cat_sub9.childs">
+                                                            <i class="fa fa-plus"></i><label> <input class="hummingbirdNoParent"
+                                                                id="node-{{brandIndex}}-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}-{{sub_cat_sub9.category_id}}-{{sub_cat_sub10.category_id}}"
+                                                                data-id="custom-{{cat.category_id}}-{{sub_cat.category_id}}-{{sub_cat_sub.category_id}}-{{sub_cat_sub_sub.category_id}}-{{sub_cat_sub_sub_sub.category_id}}-{{sub_cat_sub6.category_id}}-{{sub_cat_sub7.category_id}}-{{sub_cat_sub8.category_id}}-{{sub_cat_sub9.category_id}}-{{sub_cat_sub10.category_id}}"
+                                                                [checked]="selectedCategories.indexOf(sub_cat_sub10.category_id) > -1"
+                                                                type="checkbox">{{sub_cat_sub10.category_name}}</label>
+                                                          </li>
+                                                        </ul>
+                                                      </li>
+                                                    </ul>
+                                                  </li>
+                                                </ul>
+                                              </li>
+                                            </ul>
+                                          </li>
+                                        </ul>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="mb-3">
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" [(ngModel)]="privateContentControlValue"
+                    id="privateContentControlId2" formControlName="privateContentControlName" value="1" name="privateContentControlName" class="custom-control-input">
+                  <label class="custom-control-label" for="privateContentControlId2">Set as Private: <small>You can share
+                      this media with selected users</small></label>
+                </div>
+              </div>
+              <div *ngIf="privateContentControlValue == '1'">
+                <div class="d-block ">
+                  Filter by Users
+                  <ng-select
+                    [items]="userFilterList | async"
+                    [multiple]="true"
+                    [closeOnSelect]="false"
+                    bindLabel="name"
+                    placeholder="Select users"
+                    [loading]="userFilterLoading"
+                    [typeahead]="userFilterInput"
+                    [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="userFilterSelected"
+                    (search)="userFilterOnSearch($event)"
+                    (change)="userFilterOnChange($event)">
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group mt-4">
+            <a role="button" [routerLink]="['/mng-item-list']" class="btn btn-outline-primary btn-lg mr-3">Cancel</a>
+            <button type="button" [disabled]="!contentForm.valid || (!mediaFile && !isUpdate) || ( (privateContentControlValue == '1') && (user_ids?.length==0) ) || ( (privateContentControlValue == '0') && (currentSelectedCategories()=='') ) "
+              (click)="submitForm(contentForm.value)" class="btn btn-primary btn-lg">{{(isUpdate) ? 'Save changes' :
+              'Upload Media'}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="Uploadmedia" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="top: 80%;" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="previewModalLabel">Uploding Media</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-0">
+      </div>
+    </div>
+  </div>
+</div>

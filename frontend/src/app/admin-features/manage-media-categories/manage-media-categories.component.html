@@ -1,0 +1,51 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <h5>{{ (isEditing) ? 'Edit Category' : 'New Category'}}</h5>
+
+      <form #myForm="ngForm" [formGroup]="f" novalidate>
+        <input type="hidden" formControlName="category_id" [(ngModel)]='categoryInfo.category_id'>
+        <div class="form-group">
+          <label for="catname">Category Name</label>
+          <input type="text" class="form-control" formControlName="category_name" [(ngModel)]='categoryInfo.category_name'
+            id="catname" placeholder="Example input">
+        </div>
+        <div class="form-group">
+          <label>Poster Image</label>
+          <div class="d-lg-flex">
+            <img style="width: 50%; height: 50%;" src="{{urlImage}}" class="pr-2" />
+            <div class="d-flex flex-column">
+              <input type="file" class="form-control" formControlName="imageFile" id="customFile" (change)="changeListener($event)"
+                [ngClass]="{'is-invalid':f.controls['imageFile'].invalid && (f.controls['imageFile'].touched || f.controls['imageFile'].dirty) }">
+              <div class="invalid-feedback">
+                The Maximum File size for poster image is 1MB, <br> you file exceeded this size.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Select Brand</label>
+          <select formControlName="brand" (change)="brandChange($event.target.value)" [(ngModel)]='categoryInfo.brand'
+            class="form-control">
+            <option *ngFor="let brand of brands" value="{{brand.id}}" [selected]='categoryInfo.brand == brand.id'>{{brand.label}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Select Parent Category</label>
+          <select formControlName="parent_id" (change)="onSelectedChange($event.target.value)" [(ngModel)]='categoryInfo.parent_id'
+            class="form-control">
+            <option value="0" [selected]='categoryInfo.parent_id == undefined || categoryInfo.parent_id == 0'>Select
+              Category</option>
+            <option *ngFor="let cat of categories" [disabled]="childcat.indexOf(cat.category_id) > -1" [value]='cat.category_id'
+              [selected]='categoryInfo.parent_id == cat.category_id'>{{cat.view_category_name}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <button type="button" (click)="submit()" [disabled]="f.invalid" class="btn btn-primary btn-lg"> 
+            {{ (isEditing) ? 'Update Category' : 'Create Category'}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

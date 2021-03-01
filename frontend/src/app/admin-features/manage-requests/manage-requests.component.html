@@ -1,0 +1,116 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <h5>Manage User Registration request</h5>
+      <form #myForm="ngForm" class="material_form" [formGroup]="f" novalidate>
+        <input type="hidden" [(ngModel)]="userDetails.registration_request_id" formControlName="registration_request_id">
+        <input type="hidden" [(ngModel)]="userDetails.user_id" formControlName="user_id">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" formControlName="first_name" [(ngModel)]='userDetails.first_name' class="form-control" id="name"
+            placeholder="Name">
+        </div>
+        <div class="form-group">
+          <label for="surname">Surname</label>
+          <input type="text" formControlName="last_name" [(ngModel)]='userDetails.last_name' class="form-control" id="surname"
+            placeholder="Surname">
+        </div>
+        <div class="form-group">
+          <label for="email">Email </label>
+          <input type="email" formControlName="email" [(ngModel)]='userDetails.email' class="form-control" id="email"
+            placeholder="Email">
+        </div>
+        <div class="form-group">
+          <label for="password" minlength="6">Password</label>
+          <input type="password" [ngClass]="{'is-invalid':f.controls['user_hash'].invalid && (f.controls['user_hash'].touched || f.controls['user_hash'].dirty) }"
+            formControlName="user_hash" [(ngModel)]='userDetails.user_hash' class="form-control" id="password"
+            placeholder="Password">
+          <div class="invalid-feedback">
+            please choose a password and it must be at least 6 characters long.
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6 ">
+            <label for="mrinputCompany">Company Name</label>
+            <input type="text" formControlName="company" [(ngModel)]='userDetails.company' class="form-control" id="mrinputCompany"
+              placeholder="COMPANY NAME">
+            <div class="invalid-feedback">
+              Company name is required
+            </div>
+          </div>
+          <div class="form-group col-md-6 ">
+            <label for="mselectState" class="">Country</label>
+            <select [(ngModel)]="userDetails.state" class="form-control" formControlName="state" id="mselectState">
+              <option [selected]="userDetails.state == ''" value="">Please select Country</option>
+              <option *ngFor="let c of states" value="{{c.code}}" [selected]="userDetails.state == c.code" [ngValue]="c.code">{{c.name}}</option>
+            </select>
+            <div class="invalid-feedback">
+              please choose a State
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-3">
+            <div>Brands Required</div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [(ngModel)]='userDetails.natuzzi_access' [checked]="(userDetails.natuzzi_access==1)"
+                formControlName="natuzzi_access" class="custom-control-input" id="natuzzi">
+              <label class="custom-control-label" for="natuzzi">Natuzzi Italia</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [(ngModel)]='userDetails.editions_access' [checked]="(userDetails.editions_access==1)"
+                formControlName="editions_access" class="custom-control-input" id="editions">
+              <label class="custom-control-label" for="editions">Natuzzi Editions</label>
+            </div>
+          </div>
+          <div class="form-group col-md-3">
+            <div>User Role</div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="roleadmin" [(ngModel)]='userDetails.role' [checked]="(userDetails.role==1)"
+                formControlName="role" name="role" value="1" class="custom-control-input">
+              <label class="custom-control-label" for="roleadmin">Admin</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="roleuser" [(ngModel)]='userDetails.role' [checked]="true" formControlName="role"
+                name="role" value="2" class="custom-control-input">
+              <label class="custom-control-label" for="roleuser">User</label>
+            </div>
+          </div>
+          <div class="form-group col-md-3">
+            <div>Request Status</div>
+            <div class="custom-control custom-radio" *ngIf="userDetails.status!=2">
+              <input type="radio" [checked]="(userDetails.status==1)" formControlName="enable" value="1" class="custom-control-input"
+                name="enable" id="approved">
+              <label class="custom-control-label" for="approved">Approved</label>
+            </div>
+            <div class="custom-control custom-radio" *ngIf="userDetails.status!=1">
+              <input type="radio" [checked]="(userDetails.status==2)" formControlName="enable" value="2" class="custom-control-input"
+                name="enable" id="rejected">
+              <label class="custom-control-label" for="rejected">Rejected</label>
+            </div>
+          </div>
+          <div class="form-group col-md-3">
+            <div>User Status</div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [checked]="(userDetails.user && userDetails.user.enable==1)" formControlName="enable"
+                class="custom-control-input" id="active">
+              <label class="custom-control-label" for="active">Active</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [checked]="(userDetails.user && userDetails.user.read_only==1)" formControlName="read_only"
+                class="custom-control-input" id="readonly">
+              <label class="custom-control-label" for="readonly">Read Only</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="usernotes">Notes</label>
+          <textarea class="form-control" id="usernotes" formControlName="notes" [(ngModel)]="userDetails.notes" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <button type="button" [disabled]="f.invalid" (click)="onSubmit();" class="btn btn-primary btn-lg">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

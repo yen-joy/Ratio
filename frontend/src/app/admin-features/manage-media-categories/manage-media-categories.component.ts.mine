@@ -1,0 +1,126 @@
+import { Component, OnInit,Input,OnChanges,SimpleChanges } from '@angular/core';
+import { AlertService,ContentService,CategoryService } from './../../_services/index';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Categories} from '../../_models'
+import {TreeviewConfig,TreeviewItem } from 'ngx-treeview';
+import { ToastrService } from 'ngx-toastr';
+
+@Component({
+  selector: 'app-manage-media-categories',
+  templateUrl: './manage-media-categories.component.html',
+  styleUrls: ['./manage-media-categories.component.scss']
+})
+export class ManageMediaCategoriesComponent implements OnInit,OnChanges {
+
+  @Input() category: Categories;
+  parentId;
+
+  constructor(private contentservice: ContentService,private categoryService:CategoryService,
+    private alertService: AlertService,private formBuilder: FormBuilder,private toastr: ToastrService) { 
+      this.config= TreeviewConfig.create({
+        hasAllCheckBox: false,
+        hasFilter: true,
+        hasCollapseExpand: false,
+        decoupleChildFromParent: false,
+        maxHeight: 300
+     });
+    }
+
+    f: FormGroup;
+    public categories=[];
+    public categoryInfo:Categories;
+    childcat:any = [];
+    config;
+  ngOnInit() {
+
+    this.f = this.formBuilder.group({ 
+      category_id:[null],
+      category_name:[null, [Validators.required]],
+      parent_id:[0],
+      brand:[null, [Validators.required]],
+      th_mime_type:[null,],
+      th_name:[null, ],
+      th_size:[null,],
+     });
+     
+  }
+  
+  allowchlild(category_id){
+    console.log(this.childcat);
+   let avilable = false;
+  this.childcat.forEach(item=>{
+    if(item == category_id){
+    avilable = true;
+    }
+  });
+  return avilable;
+  }
+
+  getcat(brand:any){
+    this.contentservice.category(brand).subscribe(
+      (res) => {
+        this.categories = res.data;
+       // console.log(this.categories);
+      },
+      (error) =>{
+        this.toastr.error(error);
+      } 
+    );
+  }
+  changeListener($event) : void {
+    this.readThis($event.target);
+  }
+  
+  readThis(inputValue: any): void {
+    var file:File = inputValue.files[0];
+    var myReader:FileReader = new FileReader();
+    console.log(inputValue.files[0]);
+    this.categoryInfo.th_mime_type = inputValue.files[0].type;
+    this.categoryInfo.th_size = inputValue.files[0].size;
+    this.categoryInfo.th_name = inputValue.files[0].name;
+    myReader.onloadend = (e) => {
+      console.log( myReader.result);      
+      this.categoryInfo.imageString = myReader.result;
+    }
+    myReader.readAsDataURL(file);
+  }
+  onSelectedChange(items: any){
+    this.parentId = items;
+    console.log(this.parentId);
+  }
+
+  brandChange(val){
+    console.log(val);
+    this.getcat(val);
+  }
+
+  ngOnChanges(changes : SimpleChanges){
+      
+    if(changes.mediaType && !changes.mediaType.isFirstChange()) {}      
+      
+      if(this.category){
+        this.categoryInfo = this.category;
+        this.categoryService.getChild(this.categoryInfo.category_id).pipe().subscribe(
+          (data) => { this.childcat = data.data; });
+        this.getcat(this.categoryInfo.brand);
+      }else{
+        this.categoryInfo = new Categories;
+      }
+    console.log("category",this.categoryInfo);
+   
+  }
+  submit(){
+    console.log(this.categoryInfo);
+    this.categoryService.create(this.categoryInfo,this.parentId).subscribe(
+      (data) => {
+        if(data.status=='error'){
+          this.toastr.error(data.message);
+        }
+        if(data.status=='success'){
+          this.toastr.success(data.message);
+        } 
+      }
+    ); 
+  }
+
+}

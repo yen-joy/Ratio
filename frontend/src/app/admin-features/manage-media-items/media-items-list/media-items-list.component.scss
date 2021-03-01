@@ -1,0 +1,22 @@
+/*RESPONSIVE SETTINGS*/
+
+/*PHONES Portrait and Landscape */
+@media only screen
+and (min-device-width: 320px)
+and (max-device-width: 768px)
+and (-webkit-min-device-pixel-ratio: 2) {
+
+  .divA{border-right: 0px solid #efefef;height: auto;margin-bottom:30px; height: auto;
+    }
+  .ng-trigger-slideInOut{width: 100%!important; }
+}
+.check-button{margin-top:5px;margin-bottom:0;border:1px solid #ccc;border-radius: 50px; padding-top:8px;padding-bottom:8px;}
+
+.custom-checkbox .custom-control-label::before {
+  border-radius: 50px;
+}
+.custom-control-label {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.filter-wrap{background-color:#fbfbfb;padding:10px!important;}

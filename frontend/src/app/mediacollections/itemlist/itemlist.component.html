@@ -1,0 +1,207 @@
+<div class="breadcrumb text-center">
+  <a [routerLink]="['/groups']" class="mr-2 ml-2">Home</a> /
+  <a [routerLink]="['/categories/editions']" *ngIf='(parentcategory && parentcategory.brand==2)' class="mr-2 ml-2">Natuzzi
+    Editions</a>
+  <a [routerLink]="['/categories/natuzzi']" *ngIf='(parentcategory && parentcategory.brand==1)' class="mr-2 ml-2">Natuzzi
+    Italia</a>
+  <a [routerLink]="['/category',pan.category_id]" *ngFor="let pan of parent" class="mr-2 ml-2">/ {{pan.category_name}}</a>
+</div>
+<div class="container-fluid p-5 m-0">
+  <div class="row mt-5 mt-md-0">
+    <div class="col-12 text-center p-lg-2">
+      <h3>{{(parentcategory)?parentcategory.category_name:title}}{{(mediaprivatelist?.length > 0)?'Shared with me':''}}</h3>
+    </div>
+  </div>
+
+  <div class="row d-flex align-items-center p-lg-5 m-0" *ngIf="(category?.length > 0)">
+    <div class="col-lg-4 col-md-6 col-xs-6 group-bg mb-4" *ngFor="let cat of category" data-aos="zoom-in"
+      data-aos-delay="4000">
+      <div class="group-bg" [ngStyle]="{ 'background-image': 'url(' + (cat.imageUrl ? cat.imageUrl : defaultUrlImage) + ')'}">
+        <div class="goup-box ">
+          <a [routerLink]="['/category',cat.category_id ]" class="d-flex align-items-center justify-content-center">
+            <span class="titlewrap"><span>{{cat.category_name}}</span></span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Media List-->
+<div class="row m-0" *ngIf="(!parentcategory && mediaprivatelist?.length == 0)">
+  <div class="col-12 text-center">
+    <h5>No content has been shared with you yet</h5>
+  </div>
+</div>
+<div class="row m-0" *ngIf="(parentcategory && category?.length == 0) || medialist?.length > 0">
+  <div class="col-12 text-center">
+    <h5 *ngIf="(medialist?.length > 0)">Media in {{parentcategory.category_name}}</h5>
+    <h5 *ngIf="(medialist?.length == 0 )">{{ (parentcategory)?'There are no content in this category':'No content has
+      been shared with you yet'}}</h5>
+  </div>
+</div>
+
+<!--itemlisting-->
+<div class="container-fluid" *ngIf="(medialist?.length > 0) || (mediaprivatelist?.length > 0)  ">
+  <div class="row p-4">
+    <div class="col-12 col-md-4 col-lg-2 divA" [@slideInOut]="filtersVisible ? 'in' : 'out'">
+
+      <div class="filter-group pb-3 pr-2">
+        <div class="mb-3"><i class="icon-sort"></i>Order For</div>
+        <select (change)=sort() class="form-control  form-control-round">
+          <option>Newest</option>
+          <option>Older</option>
+        </select>
+      </div>
+      <div class="filter-group pb-3 pt-3">
+        <div class="mb-3"><i class="icon-select"></i>Select Media</div>
+        <div class="custom-control custom-checkbox">
+          <input [checked]="MediaTypeAvilable()?.length == checked()?.length " type="checkbox" class="custom-control-input"
+            [(ngModel)]="allfill" (change)="allFilters()" id="all">
+          <label class="custom-control-label" for="all">All Media</label>
+        </div>
+        <div class="custom-control custom-checkbox" *ngFor="let type of MediaTypeAvilable()">
+          <input type="checkbox" value='type.media_type_name' [(ngModel)]="type.checked" class="custom-control-input"
+            id="media_type_{{type.media_type_id}}">
+          <label class="custom-control-label" for="media_type_{{type.media_type_id}}">{{type.media_type_name}}
+            ({{mediacount(type)}})</label>
+        </div>
+      </div>
+    </div>
+    <div class="col ">
+      <div class="toolbar  d-block d-md-flex justify-content-between mb-3 flex-wrap">
+        <div class="text-left pb-2 mb-2">
+          <a class="accordion-title py-0 pb-4 text-center text-dark " (click)="toggleFilters()" aria-controls="collapseFilters"
+            role="button" href="#" onclick="return false"><i class="icon-showfilters"></i>Show Filters</a>
+        </div>
+        <div>
+          <div class="filter mb-2" *ngFor="let filterItem of checked()"> {{filterItem.media_type_name}} <a (click)=removefilter(filterItem)><i
+                class="icon-close"></i></a> </div>
+        </div>
+        <div class="mb-2">
+          <strong *ngIf="medialist?.length > 0">{{mediaresult(medialist)?.length}}</strong>
+          <strong *ngIf="mediaprivatelist?.length > 0">{{mediaresult(mediaprivatelist)?.length}}</strong>
+          content found
+        </div>
+      </div>
+      <div class="row item-list" *ngIf="medialist?.length > 0">
+
+        <div *ngFor="let media of mediaresult(medialist)" class="col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-3 " data-aos="zoom-in"
+          data-aos-delay="4000">
+          <div class="hovereffect">
+            <div [ngStyle]="{ 'background-image': 'url(' + (media.content.imageUrl ? media.content.imageUrl : defaultUrlImage) + ')'}"
+              class="img-wrapper"></div>
+            <div class="overlay">
+              <h2>{{media.content.content_name}}</h2>
+              <div class="item-tools">
+                <p>
+                  <a href="#" *ngIf="currentUser.read_only != 1 && media.content.copyright == 1" data-toggle="modal"
+                    data-target="#downloadModal" (click)="download(media.content.content_id)" class="m-2"><i class="icon-download"></i>
+                  </a>
+                  <a href="#" *ngIf="currentUser.read_only != 1 && media.content.copyright != 1 " (click)="filedownload(media.content.content_id)"
+                    class="m-2"><i class="icon-download"></i> </a>
+
+                  <a href="#" data-toggle="modal" data-target="#collectionModal" (click)="addtoCollection(media.content.content_id)"
+                    class="m-2"><i class="icon-add_collection"></i> </a>
+                  <a href="#" data-toggle="modal" data-target="#previewModal" (click)="preview((media.content.imageUrl ? media.content.imageUrl : defaultUrlImage))"
+                    class="m-2"><i class="icon-search"></i></a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row item-list" *ngIf="mediaprivatelist?.length > 0">
+        <div *ngFor="let media of mediaresult(mediaprivatelist)" class="col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-3 "
+          data-aos="zoom-in" data-aos-delay="4000">
+          <div class="hovereffect">
+            <div [ngStyle]="{ 'background-image': 'url(' + (media.content.imageUrl ? media.content.imageUrl : defaultUrlImage) + ')'}"
+              class="img-wrapper"></div>
+            <div class="overlay">
+              <h2>{{media.content.content_name}}</h2>
+              <div class="item-tools">
+                <p>
+                  <a href="#" *ngIf="currentUser.read_only != 1 && media.content.copyright == 1" data-toggle="modal"
+                    data-target="#downloadModal" (click)="download(media.content.content_id)" class="m-2"><i class="icon-download"></i>
+                  </a>
+                  <a href="#" *ngIf="currentUser.read_only != 1 && media.content.copyright != 1 " (click)="filedownload(media.content.content_id)"
+                    class="m-2"><i class="icon-download"></i> </a>
+
+                  <a href="#" data-toggle="modal" data-target="#collectionModal" (click)="addtoCollection(media.content.content_id)"
+                    class="m-2"><i class="icon-add_collection"></i> </a>
+                  <a href="#" data-toggle="modal" data-target="#previewModal" (click)="preview('http://apimcpnatuzzi.eratio.it/storage/th_content/'+media.content.th_name)"
+                    class="m-2"><i class="icon-search"></i></a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal download media -->
+<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="downloadLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form [formGroup]="f" novalidate>
+        <div class="modal-header">
+          <h5 class="modal-title" id="downloadLabel">Media Download</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Some o these media are subjected to copyright you must accept our copyright policy before te download
+          <div class="custom-control custom-checkbox mt-4">
+            <input formControlName="download" class="form-control" tabindex="1" [ngClass]="{'is-invalid':f.controls['download'].invalid && (f.controls['download'].touched || f.controls['download'].dirty) }"
+              type="checkbox" checked class="custom-control-input" id="copypolicy">
+            <label class="custom-control-label" for="copypolicy">I Agree with copyright policy</label>
+            <div class="invalid-feedback">
+              you should aggred terms and condition
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" aria-hidden="true" data-dismiss="modal" aria-label="Close" (click)="filedownload(c_dow)"
+            [disabled]="f.invalid" class="btn btn-primary"><i class="icon-download"></i> Download</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal media added to collection -->
+<div class="modal fade" id="collectionModal" tabindex="-1" role="dialog" aria-labelledby="collectionLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="collectionLabel">Media added to collection</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This media has been added to your collection
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Media preview -->
+<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="previewModalLabel">Preview</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-0">
+        <img src='{{c_dow_img}}' class="w-100" />
+      </div>
+    </div>
+  </div>
+</div>

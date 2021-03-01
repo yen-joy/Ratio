@@ -1,0 +1,110 @@
+<div class="container-fluid">
+  <div class="row mng-page-title">
+    <h2>Registration Request List</h2>
+  </div>
+  <div class="row">
+    <div class="col-12 pt-3 pb-3">
+      <div class="toolbar d-block d-md-flex justify-content-between flex-wrap">
+        <div class="d-flex">
+          <div>
+            Status: <select *ngIf="statuses?.length > 0" (change)="onFilter($event.target.value)" class="custom-select custom-select-lg mb-3">
+              <option *ngFor="let status of statuses;" id="hold" value="{{status.value}}">{{ status.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div> <a href="#" data-toggle="modal" data-target="#deleteuserModal" onclick="return false" class="m-2">
+            <i class="icon-delete-button"></i> Delete Request</a> </div>
+      </div>
+    </div>
+    <div class="col">
+      <ngx-datatable
+        #requestsTable
+        class="material"
+        [rows]="requests"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [externalPaging]="true"
+        [count]="page.totalElements"
+        [offset]="page.offset"
+        [limit]="page.size"
+        [selected]="selected"        
+        [displayCheck]="displayCheck"
+        [selectionType]="'checkbox'"
+        [selectAllRowsOnPage]="true"
+        (page)='setPage($event)'
+        [externalSorting]="true"
+        (sort)="onSort($event)"
+        (select)='onSelect($event)'
+        >
+        <ngx-datatable-column
+          [width]="30"
+          [sortable]="false"
+          [canAutoResize]="false"
+          [draggable]="false"
+          [resizeable]="false"
+          [headerCheckboxable]="true"
+          [checkboxable]="true">
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Name" prop="first_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Surname" prop="last_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Email" prop="email">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column>
+          <ng-template let-column="column" ngx-datatable-header-template>
+            Status
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ (row.status == 0) ? 'On Hold' : '' }}{{ (row.status == 2) ? 'Rejected' : '' }} {{
+                (row.status == 1) ? 'Approved' : '' }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column>
+          <ng-template let-column="column" ngx-datatable-header-template>
+            Edit
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+              <a href="#" (click)="edit(row)" onclick="return false"><i class="icon-edit"></i></a>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
+
+<app-slide-panel #mngrequestsPanel>
+  <app-manage-requests [userIdInput]="userIdInput"></app-manage-requests>
+</app-slide-panel>
+
+<div *ngIf='selected?.length > 0' class="modal fade" id="deleteuserModal" tabindex="-1" role="dialog" aria-labelledby="collectionLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="collectionLabel">Delete selected Requests</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are sure want to delete selected Requests?
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="delete()" data-dismiss="modal" class="btn btn-primary">Delete</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

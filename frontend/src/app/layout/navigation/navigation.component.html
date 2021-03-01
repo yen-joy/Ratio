@@ -1,0 +1,145 @@
+<nav class="navbar navbar-expand-lg navbar-light sticky-top bg-white">
+  <a class="navbar-brand p-3 order-0" [routerLink]="['/groups']"><img src="../../../assets/img/logoN.svg" width="30"
+      height="30" /> </a>
+
+  <button class="navbar-toggler order-2 order-sm-2 order-lg-1" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse order-3 order-sm-3 order-lg-2" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto ml-auto">
+      <li *ngFor="let brand of brands; let brandIndex = index;" class="nav-item {{currentBrand == brand.navigationId ? 'active' : ''}}">
+        <div id="dl-menu{{brandIndex}}" *ngIf="currentUser[brand.userPermission] === 1;" class="dl-menuwrapper">
+          <a class="nav-link dl-trigger dl-trigger{{brandIndex}}" [routerLink]="['/categories', brand.navigationId]">{{brand.label | uppercase}}<span
+              class="sr-only">(current)</span></a>
+          <ul class="dl-menu" *ngIf="categories[brand.id]?.length > 0">
+            <li>
+              <a [routerLink]="['/categories', brand.navigationId]">All in {{brand.label}}</a>
+            </li>
+            <li *ngFor="let cat of categories[brand.id]">
+              <a (click)='goto(cat)' [attr.routerLink]="(cat.childs?.length == 0) ? '[categoryurl,cat.category_id]' : null">{{cat.category_name}}</a>
+              <ul class="dl-submenu" *ngIf="cat.childs?.length > 0">
+                <li><a [routerLink]="[categoryurl,cat.category_id]">All in {{cat.category_name}}</a></li>
+                <li *ngFor="let sub_cat of cat.childs">
+                  <a (click)='goto(sub_cat)' [attr.routerLink]="(sub_cat.childs?.length == 0) ? '[categoryurl,sub_cat.category_id]' : null">{{sub_cat.category_name}}</a>
+                  <ul class="dl-submenu" *ngIf="sub_cat.childs?.length > 0">
+                    <li>
+                      <a [routerLink]="[categoryurl,sub_cat.category_id]">All in {{sub_cat.category_name}}</a></li>
+                    <li *ngFor="let sub of sub_cat.childs">
+                      <a (click)='goto(sub)' [attr.routerLink]="(sub.childs?.length == 0) ? '[categoryurl,sub.category_id]' : null">{{sub.category_name}}</a>
+                      <ul class="dl-submenu" *ngIf="sub.childs?.length > 0">
+                        <li>
+                          <a [routerLink]="[categoryurl,sub.category_id]">All in {{sub.category_name}}</a></li>
+                        <li *ngFor="let sub_sub of sub.childs">
+                          <a (click)='goto(sub_sub)' [attr.routerLink]="(sub_sub.childs?.length == 0) ? '[categoryurl,sub_sub.category_id]' : null">{{sub_sub.category_name}}</a>
+                          <ul class="dl-submenu" *ngIf="sub_sub.childs?.length > 0">
+                            <li>
+                              <a [routerLink]="[categoryurl,sub_sub.category_id]">All in {{sub_sub.category_name}}</a></li>
+                            <li *ngFor="let sub_sub_sub of sub_sub.childs">
+                              <a (click)='goto(sub_sub_sub)' [attr.routerLink]="(sub_sub_sub.childs?.length == 0) ? '[categoryurl,sub_sub_sub.category_id]' : null">{{sub_sub_sub.category_name}}</a>
+                              <ul class="dl-submenu" *ngIf="sub_sub_sub.childs?.length > 0">
+                                <li>
+                                  <a [routerLink]="[categoryurl,sub_sub_sub.category_id]">All in
+                                    {{sub_sub_sub.category_name}}</a></li>
+                                <li *ngFor="let sub_sub_sub6 of sub_sub_sub.childs">
+                                  <a (click)='goto(sub_sub_sub6)' [attr.routerLink]="(sub_sub_sub6.childs?.length == 0) ? '[categoryurl,sub_sub_sub6.category_id]' : null">{{sub_sub_sub6.category_name}}</a>
+                                  <ul class="dl-submenu" *ngIf="sub_sub_sub6.childs?.length > 0">
+                                    <li>
+                                      <a [routerLink]="[categoryurl,sub_sub_sub6.category_id]">All in
+                                        {{sub_sub_sub6.category_name}}</a></li>
+                                    <li *ngFor="let sub_sub_sub7 of sub_sub_sub6.childs">
+                                      <a (click)='goto(sub_sub_sub7)' [attr.routerLink]="(sub_sub_sub7.childs?.length == 0) ? '[categoryurl,sub_sub_sub7.category_id]' : null">{{sub_sub_sub7.category_name}}</a>
+                                      <ul class="dl-submenu" *ngIf="sub_sub_sub7.childs?.length > 0">
+                                        <li>
+                                          <a [routerLink]="[categoryurl,sub_sub_sub7.category_id]">All in
+                                            {{sub_sub_sub7.category_name}}</a></li>
+                                        <li *ngFor="let sub_sub_sub8 of sub_sub_sub7.childs">
+                                          <a (click)='goto(sub_sub_sub8)' [attr.routerLink]="(sub_sub_sub8.childs?.length == 0) ? '[categoryurl,sub_sub_sub8.category_id]' : null">{{sub_sub_sub8.category_name}}</a>
+                                          <ul class="dl-submenu" *ngIf="sub_sub_sub8.childs?.length > 0">
+                                            <li>
+                                              <a [routerLink]="[categoryurl,sub_sub_sub8.category_id]">All in
+                                                {{sub_sub_sub8.category_name}}</a></li>
+                                            <li *ngFor="let sub_sub_sub9 of sub_sub_sub8.childs">
+                                              <a (click)='goto(sub_sub_sub9)' [attr.routerLink]="(sub_sub_sub9.childs?.length == 0) ? '[categoryurl,sub_sub_sub9.category_id]' : null">{{sub_sub_sub9.category_name}}</a>
+                                              <ul class="dl-submenu" *ngIf="sub_sub_sub9.childs?.length > 0">
+                                                <li>
+                                                  <a [routerLink]="[categoryurl,sub_sub_sub9.category_id]">All in
+                                                    {{sub_sub_sub9.category_name}}</a></li>
+                                                <li *ngFor="let sub_sub_sub10 of sub_sub_sub9.childs">
+                                                  <a [routerLink]="[categoryurl,sub_sub_sub10.category_id]">{{sub_sub_sub10.category_name}}</a>
+                                                </li>
+                                              </ul>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="tools-menu order-1 order-sm-1 order-lg-3">
+    <a href="#" class="p-1 icon position-relative d-inline-block" (click)="opensearch()" onclick="return false"
+      placement="left" ngbTooltip="Search Content"><i class="icon-search "></i></a>
+    <div ngbDropdown class="d-inline-block" placement="bottom-right" *ngIf="role==1">
+      <a class="p-1 icon d-inline-block dropp" id="dropdownAdmin" ngbDropdownToggle placement="left" ngbTooltip="Admin Features"><span
+          *ngIf="holdcount > 0" id="holdClass" class="badge badge-pill badge-danger">&nbsp;</span><i class="icon-settings"></i></a>
+      <div ngbDropdownMenu aria-labelledby="dropdownAdmin">
+        <a class="dropdown-item" [routerLink]="['/mng-categories-list']" href="mng-categories-list">Categories</a>
+        <a class="dropdown-item" [routerLink]="['/mng-media-types']" href="mng-media-types">Media Types</a>
+        <a class="dropdown-item" [routerLink]="['/mng-item-list']" href="mng-item-list">Contents</a>
+        <a class="dropdown-item" [routerLink]="['/mng-users']" href="mng-users">Users</a>
+        <a class="dropdown-item" [routerLink]="['/mng-requests']" href="mng-requests">Registration requests <span *ngIf="holdcount > 0"
+            id="holdClassCount" class="badge badge-pill badge-danger">{{holdcount}}</span></a>
+        <a class="dropdown-item" [routerLink]="['/download-logs']" href="download-logs">Download Logs</a>
+        <a class="dropdown-item" [routerLink]="['/accesses-logs']" href="accesses-logs">Accesses Logs</a>
+        <a class="dropdown-item" href="#" (click)="logout()" onclick="return false">logout</a>
+      </div>
+    </div>
+    <div ngbDropdown class="d-inline-block" placement="bottom-right" *ngIf="role==2">
+      <a href="#" class="p1 icon dropp" id="dropdownUser" ngbDropdownToggle placement="left" ngbTooltip="User Area"
+        onclick="return false"><i class="icon-user"></i></a>
+      <div ngbDropdownMenu aria-labelledby="dropdownUser">
+        <a class="dropdown-item" href="#" (click)="registration()" onclick="return false">My Account</a>
+        <a class="dropdown-item" [routerLink]="[categoryurl]">Shared With me<span *ngIf="medialist?.length > 0"
+            class="badge badge-pill badge-danger">{{medialist?.length}}</span></a>
+        <a class="dropdown-item" href="#" (click)="viewdownlogs()" onclick="return false">My Logs</a>
+        <a class="dropdown-item" href="#" (click)="logout()" onclick="return false">logout</a>
+      </div>
+    </div>
+    <a href="#" class="p-1 icon position-relative d-inline-block" (click)="openCollection()" onclick="return false"
+      placement="left" ngbTooltip="User Collections"><i class="icon-heart "></i><span *ngIf="medialist?.length > 0"
+        class="badge badge-pill badge-danger">{{medialist?.length}}</span></a>
+  </div>
+</nav>
+
+<app-slide-panel #registrationPanel>
+  <app-user-account></app-user-account>
+</app-slide-panel>
+
+<app-slide-panel #collectionsPanel class="collections-panel">
+  <app-usercollections></app-usercollections>
+</app-slide-panel>
+
+<app-slide-panel #viewdownlogsPanel>
+  <app-download-logs></app-download-logs>
+</app-slide-panel>
+
+<app-slide-panel #searchPanel>
+  <app-searchbar></app-searchbar>
+</app-slide-panel>

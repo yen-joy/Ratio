@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <h5>{{(!mediaType.media_type_id)?'Create new Media type':'Edit Media type'}}</h5>
+      
+      <form #myForm="ngForm" [formGroup]="f" novalidate >
+        <div class="form-group">
+            <input type="hidden" formControlName="media_type_id" [(ngModel)]='mediaType.media_type_id'>
+          <label for="catname">Media Type Name </label>
+          <input type="text" class="form-control" id="media_type_name" formControlName="media_type_name" [(ngModel)]='mediaType.media_type_name' >
+        </div>
+        <div class="form-group">
+          <button type="button" (click)="onSubmit();" [disabled]='duttondisable' class="btn btn-primary btn-lg">{{(!mediaType.media_type_id)?'Create Media type':'Edit Media type'}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

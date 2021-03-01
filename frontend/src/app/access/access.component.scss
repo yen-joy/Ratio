@@ -1,0 +1,21 @@
+.bg-image{
+  background-image: url(../../assets/img/bg-log-in_old.jpg);background-repeat: no-repeat;background-size: cover; background-position:center;
+  .row{height: 100vh;}
+}
+/*responsive tuning*/
+@media screen and (min-device-width: 568px)
+and (max-device-width: 736px) {
+  .bg-image{
+
+    .row{height: auto;}
+  }
+}
+
+/*responsive tuning*/
+@media screen and (max-device-width: 840px)
+and (max-device-width: 840px) {
+  .bg-image{
+    background-image: url(../../assets/img/bg-log-in_old.jpg);background-repeat: no-repeat;background-size: cover; background-position:center;
+
+  }
+}

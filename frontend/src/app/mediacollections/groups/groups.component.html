@@ -1,0 +1,22 @@
+<div class="breadcrumb text-center">
+  <a [routerLink]="['/groups']" class="mr-2 ml-2">Home</a>
+</div>
+<div class="container-fluid p-5">
+  <div class="row d-flex align-items-center p-lg-5 mt-2 mt-md-0">
+    <div class="col-12 col-md group-bg mb-4" *ngIf="currentUser.natuzzi_access==1" data-aos="zoom-in" data-aos-delay="4000">
+      <div class="group-bg" style="background-image: url(../../../assets/img/natuzzi_italia_bg.jpg);">
+        <div class="goup-box ">
+          <a [routerLink]="['/categories','natuzzi']" class="d-flex align-items-center justify-content-center"><img src="../../../assets/img/logo_esetso_white.svg"></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md group-bg mb-4" *ngIf="currentUser.editions_access==1" data-aos="zoom-in" data-aos-delay="8000">
+      <div class="group-bg" style="background-image: url(../../../assets/img/natuzzi_editions.jpg);">
+        <div class="goup-box ">
+          <a [routerLink]="['/categories','editions']" class="d-flex align-items-center justify-content-center"><img
+              src="../../../assets/img/NE_logo.svg"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
